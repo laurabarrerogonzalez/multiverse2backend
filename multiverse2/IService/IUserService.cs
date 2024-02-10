@@ -2,11 +2,10 @@
 
 namespace Multiverse.IServices
 {
-    public interface IUserService
+    public interface IUsersService
     {
-       
-        int InsertUser(UserItem userItem);
-        bool DeleteUserById(int userId);
-
+        int InsertUsers(Users users);
+        int GetRoleIdByName(string roleName);
+        bool DeleteUser(int userId);
     }
 }

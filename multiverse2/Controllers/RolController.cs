@@ -6,14 +6,14 @@ using Multiverse.Services;
 using System.Security.Authentication;
 using System.Web.Http.Cors;
 
-namespace SoundofSilence.Controllers
+namespace Multiverse.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     [Route("[controller]/[action]")]
     public class RolController : ControllerBase
     {
 
-        private readonly Multiverse.IServices.IRolService _rolService;
+        private readonly IRolService _rolService;
         private readonly ServiceContext _serviceContext;
 
         public RolController(IRolService rolService, ServiceContext serviceContext)
@@ -23,29 +23,19 @@ namespace SoundofSilence.Controllers
 
         }
 
-
-        [HttpGet(Name = "GetAllRoles")]
-        public IActionResult Get()
-        {
-            var roles = _serviceContext.Set<RolItem>().ToList();
-            return Ok(roles);
-        }
-
-
-
         [HttpPost(Name = "InsertRol")]
-        public IActionResult Post([FromQuery] string userName, [FromQuery] string userPassword, [FromBody] RolItem rol)
+        public IActionResult Post([FromQuery] string userName, [FromQuery] string userPassword, [FromBody] Rol rol)
         {
-            var selectedUser = _serviceContext.Set<UserItem>()
-                                   .Where(u => u.UserName == userName
+            var selectedUser = _serviceContext.Set<Users>()
+                                   .Where(u => u.Name_user == userName
                                        && u.Password == userPassword
-                                       && u.IdRol == 1)
+                                       && u.Id_rol == 1)
                                     .FirstOrDefault();
 
             if (selectedUser != null)
             {
-                var existingWithNameRol = _serviceContext.Set<RolItem>()
-                    .FirstOrDefault(u => u.RolName == rol.RolName);
+                var existingWithNameRol = _serviceContext.Set<Rol>()
+                    .FirstOrDefault(u => u.Name_rol == rol.Name_rol);
 
                 if (existingWithNameRol != null)
                 {

@@ -21,49 +21,67 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Entities.RolItem", b =>
+            modelBuilder.Entity("Entities.Rol", b =>
                 {
-                    b.Property<int>("IdRol")
+                    b.Property<int>("Id_rol")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRol"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_rol"));
 
-                    b.Property<string>("RolName")
+                    b.Property<string>("Name_rol")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdRol");
+                    b.HasKey("Id_rol");
 
-                    b.ToTable("RollUser", (string)null);
+                    b.ToTable("Rol", (string)null);
                 });
 
-            modelBuilder.Entity("Entities.UserItem", b =>
+            modelBuilder.Entity("Entities.Users", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Id_user")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_user"));
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdRol")
+                    b.Property<int>("Id_rol")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name_user")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id_user");
 
-                    b.HasKey("Id");
+                    b.HasIndex("Id_rol");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.Users", b =>
+                {
+                    b.HasOne("Entities.Rol", "Rol")
+                        .WithMany("Users")
+                        .HasForeignKey("Id_rol")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("Entities.Rol", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

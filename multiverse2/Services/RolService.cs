@@ -1,8 +1,7 @@
 ﻿using Data;
 using Entities;
-using Multiverse.IServices;
 using Multiverse.Services;
-
+using Multiverse.IServices;
 
 namespace Multiverse.Services
 {
@@ -13,13 +12,12 @@ namespace Multiverse.Services
         {
         }
 
-        public int InsertRol(RolItem rol)
+        public int InsertRol(Rol rol)
         {
-            _serviceContext.RolItem.Add(rol);
+            _serviceContext.Rol.Add(rol);
             _serviceContext.SaveChanges();
-            return rol.IdRol;
+            return rol.Id_rol;
         }
 
-       
     }
 }

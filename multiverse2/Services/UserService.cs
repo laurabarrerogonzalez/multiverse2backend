@@ -1,40 +1,54 @@
 ﻿using Data;
 using Entities;
 using Multiverse.IServices;
+using Multiverse.Services;
 
-namespace Multiverse.Services
+
+namespace Multiverse.Services;
+
+public class UsersService : BaseContextService, IUsersService
 {
-    public class UserService : BaseContextService, IUserService
+    public UsersService(ServiceContext serviceContext) : base(serviceContext)
     {
-        public UserService(ServiceContext serviceContext) : base(serviceContext)
+
+    }
+
+
+    public int InsertUsers(Users users)
+    {
+        _serviceContext.Users.Add(users);
+        _serviceContext.SaveChanges();
+        return users.Id_user;
+    }
+
+    public int GetRoleIdByName(string roleName)
+    {
+        var role = _serviceContext.Rol.FirstOrDefault(r => r.Name_rol == roleName);
+
+        if (role != null)
         {
+            return role.Id_rol;
         }
-
-        public int InsertUser(UserItem userItem)
+        else
         {
-            // Asigna el IdRol predeterminado (2) al nuevo usuario
-            userItem.IdRol = 2;
-
-            _serviceContext.UserItem.Add(userItem);
-            _serviceContext.SaveChanges();
-
-            return userItem.Id;
+            throw new Exception($"No role found with the name {roleName}");
         }
+    }
 
-        public bool DeleteUserById(int userId)
+
+    public bool DeleteUser(int userId)
+    {
+        var user = _serviceContext.Users.FirstOrDefault(u => u.Id_user == userId);
+
+        if (user == null)
         {
-            var userToDelete = _serviceContext.UserItem.FirstOrDefault(u => u.Id == userId);
-
-            if (userToDelete != null)
-            {
-                _serviceContext.UserItem.Remove(userToDelete);
-                _serviceContext.SaveChanges();
-                return true;
-            }
-
             return false;
         }
 
+        _serviceContext.Users.Remove(user);
+        _serviceContext.SaveChanges();
 
+        return true;
     }
+
 }
